@@ -37,10 +37,13 @@ function display_flash_message($name){
                unset($_SESSION[$name]);
     }
 }
+/*Эта функция чистит сессии при нажатии на кнопку ВЫХОД*/
 function remove_sessions_on_exit(){
 
 	unset ($_SESSION["is_logged_in"]);
 }
+/*Эта функция проверяет сессию чтобы незарегистрированные
+не могли смотреть сайт его прикрутил в шапку сайта*/
 function authorization_check(){
 	if (empty($_SESSION["is_logged_in"])) {
 		header("Location: /page_login.php");
@@ -65,15 +68,15 @@ function get_admin(){
 			return 1;
 		}
 }
-/*а эта функция определяет если переменная не пустая
+/*Эта функция определяет если переменная не пустая
 тогда он АДМИН и ему надо показать кнопку иначе не показыват */
 function display_button_create($name)	{
 		if (!empty($name)) {
 			echo "<a class=\"btn btn-success\" href=\"create_user.html\">Добавить</a>";
 		}
 }
-function display_settings($name){
-	if (!empty($name)) {
+/*функция только для настройки юзера*/
+function display_settings(){
 			echo  " <div class=\"dropdown-menu\">
 			        <a class=\"dropdown-item\" href=\"edit.html\">
 			            <i class=\"fa fa-edit\"></i>
@@ -93,13 +96,36 @@ function display_settings($name){
 			            Удалить
 			        </a>
 			    </div>";
-		}
 }
-function display_icon_setting($name){
-	if (!empty($name)) {
+/*функция только для иконки настройки юзера*/
+function display_icon_setting(){
 			echo  "<i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
                    <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i>";
-		}
+}
+function info_card(){
+		$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+
+		$sql = "SELECT * FROM list_card";
+
+		$statment = $pdo -> prepare($sql);
+        $statment -> execute();
+        $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
+        return $card;
+}
+function get_email_by_user_id ($name){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
+
+	$sql = "SELECT * FROM list_users";
+
+	$statement = $pdo->prepare($sql);
+	$statement->execute();
+	$user = $statement-> fetchAll(PDO::FETCH_ASSOC);
+
+	foreach ($user as $value) {
+
+		if($name==$value['id'])
+		echo  $value['login'];
+	};
 }
 
 ?>
