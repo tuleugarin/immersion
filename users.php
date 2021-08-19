@@ -1,13 +1,15 @@
 <?php
     session_start();
     require "functions.php";
-    var_dump($SESSION["email"]);
     require "header.php";
 ?>
         <main id="js-page-content" role="main" class="page-content mt-3">
             <div class="alert alert-success">
                 Профиль успешно обновлен.
             </div>
+            <?php
+                echo display_flash_message("alert-success");
+            ?>
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
@@ -49,16 +51,6 @@
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?php echo ($card_user['username']); ?>
-<?php   if (!empty($admin))
-        {
-            display_icon_setting();
-        }
-        elseif ($_SESSION["is_logged_in"]==$card_user['id'])
-        {
-            display_icon_setting();
-        }
-?>
-                                    </a>
 <?php   if (!empty($admin))
         {
             display_settings();
