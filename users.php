@@ -1,13 +1,12 @@
 <?php
     session_start();
     require "functions.php";
-    var_dump($SESSION["email"]);
     require "header.php";
 ?>
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <div class="alert alert-success">
-                Профиль успешно обновлен.
-            </div>
+            <?php
+                echo display_flash_message("success");
+            ?>
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
@@ -15,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="col-xl-12">
-<?php
+<?php // Показываем кнопку Создать
     $admin = get_admin();
     display_button_create($admin);
 ?>
@@ -33,7 +32,7 @@
                 </div>
             </div>
             <div class="row" id="js-contacts">
-<?php
+<?php // Вывести карточки из списока пользователей
     $card=info_card();
     foreach ($card as $card_user):;
 ?>
@@ -49,25 +48,17 @@
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?php echo ($card_user['username']); ?>
-<?php   if (!empty($admin))
+
+<?php   if (!empty($admin)) //показываем кнопку настройки
         {
-            display_icon_setting();
+            display_settings();
         }
         elseif ($_SESSION["is_logged_in"]==$card_user['id'])
         {
-            display_icon_setting();
+            display_settings();
         }
 ?>
                                     </a>
-<?php   if (!empty($admin))
-        {
-            display_settings();
-        }
-        elseif ($_SESSION["is_logged_in"]==$card_user['id'])
-        {
-            display_settings();
-        }
-?>
                                     <span class="text-truncate text-truncate-xl"><?php echo ($card_user['title']); ?></span>
                                 </div>
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
@@ -80,8 +71,8 @@
                             <div class="p-3">
                                 <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
                                     <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php echo ($card_user['tel']); ?></a>
-                                <a href="mailto:<?php echo ($_SESSION["email"]); ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php get_email_by_user_id ($card_user['id']); ?></a>
+                                <a href="mailto:<?php echo ($_SESSION["login"]); ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
+                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo ($_SESSION["login"]); ?></a>
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i> <?php echo ($card_user['address']); ?></address>
                                 <div class="d-flex flex-row">

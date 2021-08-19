@@ -14,6 +14,7 @@ function set_flash_message($name, $message){
 
 	$_SESSION[$name] = $message;
 }
+/*Переадресуем авторизированного пользователя на одну из страниц*/
 function redirect_to($path){
 	header("Location: {$path}");
 	exit;
@@ -37,15 +38,25 @@ function display_flash_message($name){
                unset($_SESSION[$name]);
     }
 }
-/*Эта функция чистит сессии при нажатии на кнопку ВЫХОД*/
-function remove_sessions_on_exit(){
+/*Сброс авторизации*/
+function Logout(){
+	// Делаем cookies устаревшими(единственный способ удалит их)
+	setcookie('login', '', time() - 1);//-1сек пожже
 
+	// Сброс сессии.
+	unset ($_SESSION["email"]);
 	unset ($_SESSION["is_logged_in"]);
 }
 /*Эта функция проверяет сессию чтобы незарегистрированные
 не могли смотреть сайт его прикрутил в шапку сайта*/
 function authorization_check(){
-	if (empty($_SESSION["is_logged_in"])) {
+
+	/* Если в контексте сессии не установлено имя пользователя, он берет их из coockies*/
+    if(!isset($_SESSION['login']) && isset($_COOKIE['login']))
+        $_SESSION['login'] = $_COOKIE['login'];
+
+    /* Неавторизованных пользователей отправляем */
+	if (empty($_SESSION["is_logged_in"]) && empty($_SESSION["email"])) {
 		header("Location: /page_login.php");
 		exit;
 	}
@@ -77,7 +88,9 @@ function display_button_create($name)	{
 }
 /*функция только для настройки юзера*/
 function display_settings(){
-			echo  " <div class=\"dropdown-menu\">
+			echo  " <i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
+                   <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i></a>
+                   <div class=\"dropdown-menu\">
 			        <a class=\"dropdown-item\" href=\"edit.html\">
 			            <i class=\"fa fa-edit\"></i>
 			        Редактировать</a>
@@ -97,11 +110,6 @@ function display_settings(){
 			        </a>
 			    </div>";
 }
-/*функция только для иконки настройки юзера*/
-function display_icon_setting(){
-			echo  "<i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
-                   <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i>";
-}
 function info_card(){
 		$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
 
@@ -111,21 +119,6 @@ function info_card(){
         $statment -> execute();
         $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
         return $card;
-}
-function get_email_by_user_id ($name){
-	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
-
-	$sql = "SELECT * FROM list_users";
-
-	$statement = $pdo->prepare($sql);
-	$statement->execute();
-	$user = $statement-> fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($user as $value) {
-
-		if($name==$value['id'])
-		echo  $value['login'];
-	};
 }
 
 ?>

@@ -1,7 +1,8 @@
 <?php
     session_start();
     require "functions.php";
-    remove_sessions_on_exit();
+    /*Попадая на страницу page_login.php аторизация сбрасывается*/
+    Logout();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +56,7 @@
                 <div class="form-group text-left">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="rememberme">
-                        <label class="custom-control-label" for="rememberme">Запомнить меня</label>
+                        <label class="custom-control-label" for="rememberme" name="rememberme">Запомнить меня</label>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-default float-right" name="submit_log">Войти</button>
