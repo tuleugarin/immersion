@@ -77,7 +77,9 @@ function display_button_create($name)	{
 }
 /*функция только для настройки юзера*/
 function display_settings(){
-			echo  " <div class=\"dropdown-menu\">
+			echo  " <i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
+                   <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i></a>
+		   <div class=\"dropdown-menu\">
 			        <a class=\"dropdown-item\" href=\"edit.html\">
 			            <i class=\"fa fa-edit\"></i>
 			        Редактировать</a>
@@ -96,11 +98,6 @@ function display_settings(){
 			            Удалить
 			        </a>
 			    </div>";
-}
-/*функция только для иконки настройки юзера*/
-function display_icon_setting(){
-			echo  "<i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
-                   <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i>";
 }
 function info_card(){
 		$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
