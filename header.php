@@ -1,4 +1,3 @@
-<?php echo authorization_check() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

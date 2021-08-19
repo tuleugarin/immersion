@@ -38,16 +38,27 @@ function display_flash_message($name){
     }
 }
 /*Эта функция чистит сессии при нажатии на кнопку ВЫХОД*/
-function remove_sessions_on_exit(){
+function Logout(){
 
-	unset ($_SESSION["is_logged_in"]);
+	// Делаем cookies устаревшими (единственный способ их удалит)
+	setcookie('login', '', time() -1 );// -1 сек пожже
+
+	// Сброс сессии
+	unset($_SESSION['is_logged_in']);
+	unset($_SESSION['login']);
+
 }
-/*Эта функция проверяет сессию чтобы незарегистрированные
-не могли смотреть сайт его прикрутил в шапку сайта*/
+/* Если в контексте сессии не установлен, то мы будем брать их из куки*/
 function authorization_check(){
-	if (empty($_SESSION["is_logged_in"])) {
+
+	if ( !isset($_SESSION['login']) && isset($_COOKIE['login'])){
+		$_SESSION["login"] = $_COOKIE["login"];
+	}
+
+	// Неавторизованных пользователей отправляем страницу регистра
+	if (empty($_SESSION["is_logged_in"])){
 		header("Location: /page_login.php");
-		exit;
+				exit;
 	}
 }
 /*создал таблицу list_status там 2 строки id и id_user-его
@@ -108,21 +119,6 @@ function info_card(){
         $statment -> execute();
         $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
         return $card;
-}
-function get_email_by_user_id ($name){
-	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
-
-	$sql = "SELECT * FROM list_users";
-
-	$statement = $pdo->prepare($sql);
-	$statement->execute();
-	$user = $statement-> fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($user as $value) {
-
-		if($name==$value['id'])
-		echo  $value['login'];
-	};
 }
 
 ?>
