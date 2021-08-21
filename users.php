@@ -1,12 +1,11 @@
 <?php
     session_start();
     require "functions.php";
-    authorization_check();
+    authorization_check();//
     require "header.php";
-
 ?>
         <main id="js-page-content" role="main" class="page-content mt-3">
-            <?php
+            <?php //показываем сообщения от создания юзера
                 echo display_flash_message("success");
             ?>
             <div class="subheader">

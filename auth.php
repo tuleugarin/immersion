@@ -6,9 +6,6 @@ $login = $_POST["login"];
 $password = $_POST["password"];
 $rememberme = $_POST["rememberme"];
 
-$enter_site = false;
-
-
 /* Авторизация */
 
 $user = get_user_by_login($login);
