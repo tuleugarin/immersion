@@ -119,13 +119,12 @@ function info_card(){
         $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
         return $card;
 }
-function set_info_card($id_new_user, $login, $upload_img, $username, $title, $tel, $address){
+function set_info_card($id_new_user, $upload_img, $username, $title, $tel, $address){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "INSERT INTO list_card (id, email, img, username, title, tel, address) VALUES (:id, :email,:img, :username, :title, :tel, :address)";
+	$sql = "INSERT INTO list_card (id, img, username, title, tel, address) VALUES (:id, :img, :username, :title, :tel, :address)";
 	$statement = $pdo->prepare($sql);
 	$result = $statement->execute([
 		'id'=>$id_new_user,
-		'email'=>$login,
 		'img'=>$upload_img,
 		'username'=>$username,
 		'title'=>$title,
@@ -135,23 +134,33 @@ function set_info_card($id_new_user, $login, $upload_img, $username, $title, $te
 
 	return $pdo->lastInsertId();
 }
-function upload_file($file){
-		$uploads_dir = 'img/demo/avatars';
-        $tmp_name = $file["tmp_name"];
-        $name_ava = "avatar-".uniqid().".png";
-
+function upload_file($file, $uploads_dir, $name_ava){
+	// Если не прекрепили файл
 	if (empty($file['name'])){
 		set_flash_message("danger", "Файл не выбран");
 		redirect_to("create_user.php");
 		return;
 	}
-
-	if (move_uploaded_file($tmp_name, "$uploads_dir/$name_ava")){
+	// Если размер файла большой
+	if (($file['size'] > 1000000)){
+		set_flash_message("danger", "Файл не должен быть больше 1Мб");
+		redirect_to("create_user.php");
+		return;
+	}
+	// Типы допустимых файлов
+	$types = ['image/png', 'image/gif', 'image/jpg', 'image/jpeg'];
+	if (!in_array($file['type'], $types)){
+		set_flash_message("danger", "Тип загружаемого файла не изображение");
+		redirect_to("create_user.php");
+		return;
+	}
+	// Копируем файл в директорию
+	if (move_uploaded_file($file["tmp_name"], "$uploads_dir/$name_ava")){
 		set_flash_message("success", "Файл загружен");
 
 	}
 	else{
-		set_flash_message("danger", "Файл не загружен1");
+		set_flash_message("danger", "Файл не загружен");
 		redirect_to("create_user.php");
 	}
 
