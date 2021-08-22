@@ -41,24 +41,11 @@ function display_flash_message($name){
 function Logout(){
 
 	// Делаем cookies устаревшими (единственный способ их удалит)
-	setcookie('login', '', time() -1 );// -1 сек пожже
+	setcookie('user_id', '', time() -1 );// -1 сек пожже
 
 	// Сброс сессии
-	unset($_SESSION['is_logged_in']);
+	unset($_SESSION['is_logged_in_id']);
 	unset($_SESSION['login']);
-}
-/* Если в контексте сессии не установлен, то мы будем брать их из куки*/
-function authorization_check(){
-
-	if ( !isset($_SESSION['login']) && isset($_COOKIE['login'])){
-		$_SESSION["login"] = $_COOKIE["login"];
-	}
-
-	// Неавторизованных пользователей отправляем страницу регистра
-	if (empty($_SESSION["is_logged_in"])){
-		header("Location: /page_login.php");
-				exit;
-	}
 }
 /*создал таблицу list_status там 2 строки id и id_user-его
 я связал с id строкой таблицы зарегистрированных пользователей
@@ -73,9 +60,20 @@ function get_admin(){
 	$users = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($users as $key => $value)
-		if ($value['id_user']==$_SESSION["is_logged_in"])
+		if ($value['id_user']==$_SESSION["is_logged_in_id"])
 			return true;//тут я сравнил айди номер из сессии с айди номерами из таблицы с админами если 1 тогда он админ
-
+}
+/* Авторизация */
+function authorization_check(){
+	// Если в контексте сессии не установлен, то мы будем брать их из куки
+	if ( !isset($_SESSION['is_logged_in_id']) && isset($_COOKIE['user_id'])){
+		$_SESSION["is_logged_in_id"] = $_COOKIE["user_id"];
+	}
+	// Если идентификатор пуст, то он неавторизованный
+	if (empty($_SESSION["is_logged_in_id"])){
+		header("Location: /page_login.php");
+				exit;
+	}
 }
 /*Эта функция определяет если переменная не пустая
 тогда он АДМИН и ему надо показать кнопку иначе не показыват */
@@ -119,6 +117,7 @@ function info_card(){
         $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
         return $card;
 }
+/* Функция для создания дополнительных данных юзера */
 function set_info_card($id_new_user, $upload_img, $username, $title, $tel, $address){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
 	$sql = "INSERT INTO list_card (id, img, username, title, tel, address) VALUES (:id, :img, :username, :title, :tel, :address)";
@@ -134,7 +133,8 @@ function set_info_card($id_new_user, $upload_img, $username, $title, $tel, $addr
 
 	return $pdo->lastInsertId();
 }
-function upload_file($file, $uploads_dir, $name_ava){
+/* Функция загрузки аватара на сервер */
+function upload_file($file){
 	// Если не прекрепили файл
 	if (empty($file['name'])){
 		set_flash_message("danger", "Файл не выбран");
@@ -155,7 +155,8 @@ function upload_file($file, $uploads_dir, $name_ava){
 		return;
 	}
 	// Копируем файл в директорию
-	if (move_uploaded_file($file["tmp_name"], "$uploads_dir/$name_ava")){
+	$file_name = 'img/demo/avatars/'."avatar-".uniqid().".png";
+	if (move_uploaded_file($file["tmp_name"], $file_name)){
 		set_flash_message("success", "Файл загружен");
 
 	}
@@ -163,7 +164,6 @@ function upload_file($file, $uploads_dir, $name_ava){
 		set_flash_message("danger", "Файл не загружен");
 		redirect_to("create_user.php");
 	}
-
 }
 
 ?>

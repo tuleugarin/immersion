@@ -14,15 +14,16 @@ $user = get_user_by_login($login);
 
 		if (password_verify($password, $user['password'])) {//если есть проверяем совпадают ли пароли
 
-		    //Запоминаем имя в сессии
+		    //Запоминаем логин в сессии
 			$_SESSION['login'] = $login;
 
-			//передаем номер пользователя чтобы
-			$_SESSION['is_logged_in'] = $user['id'];
+			//передаем номер пользователя чтобы идентифицировать остальных страницах
+			$_SESSION['is_logged_in_id'] = $user['id'];
+			$id = $_SESSION['is_logged_in_id'];
 
 			//и в cookies, если пользователь пожелал запомнит его
 			if ($rememberme== 'on')
-				setcookie('login', $login, time() + 3600 * 24 * 7);
+				setcookie('user_id', $id, time() + 3600 * 24 * 7);
 
 		    /*Переадресуем авторизированного пользователя на одну из страниц*/
 		    redirect_to("users.php");

@@ -1,7 +1,13 @@
 <?php
     session_start();
     require "functions.php";
-    authorization_check();//
+    authorization_check();
+    // Если переменный пуст то он не админ
+    $admin = get_admin();
+    if (empty($admin)){
+        header("Location: /users.php");
+    }
+    // Загрузка шляпы сайта
     require "header.php";
 ?>
     <main id="js-page-content" role="main" class="page-content mt-3">

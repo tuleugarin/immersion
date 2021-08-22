@@ -54,7 +54,7 @@
         {
             display_settings();
         }
-        elseif ($_SESSION["is_logged_in"]==$card_user['id'])
+        elseif ($_SESSION["is_logged_in_id"]==$card_user['id'])
         {
             display_settings();
         }
