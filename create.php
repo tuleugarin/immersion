@@ -23,11 +23,9 @@ if (!empty($user)) {
 
 /* Загрузка аватарки */
 if (isset($_FILES['file'])) {
-		$uploads_dir = 'img/demo/avatars';
-        $tmp_name = $file["tmp_name"];
-        $name_ava = "avatar-".uniqid().".png";
 
-	upload_file($_FILES['file'], $uploads_dir, $name_ava);
+
+	upload_file($_FILES['file']);
 }
 else{
 	set_flash_message("danger", "файл не загружен2");

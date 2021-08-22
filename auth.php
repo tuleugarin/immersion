@@ -19,11 +19,10 @@ $user = get_user_by_login($login);
 
 			//передаем номер пользователя чтобы идентифицировать остальных страницах
 			$_SESSION['is_logged_in_id'] = $user['id'];
-			$id = $_SESSION['is_logged_in_id'];
 
 			//и в cookies, если пользователь пожелал запомнит его
 			if ($rememberme== 'on')
-				setcookie('user_id', $id, time() + 3600 * 24 * 7);
+				setcookie('user_id', $_SESSION['is_logged_in_id'], time() + 3600 * 24 * 7);
 
 		    /*Переадресуем авторизированного пользователя на одну из страниц*/
 		    redirect_to("users.php");

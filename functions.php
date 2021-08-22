@@ -77,17 +77,18 @@ function authorization_check(){
 }
 /*Эта функция определяет если переменная не пустая
 тогда он АДМИН и ему надо показать кнопку иначе не показыват */
-function display_button_create($name)	{
+function display_button_create($name){
 		if (!empty($name)) {
 			echo "<a class=\"btn btn-success\" href=\"create_user.php\">Добавить</a>";
 		}
 }
 /* функция опции настройки только для юзера*/
-function display_settings(){
-			echo  " <i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
-                   <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i></a>
-		   <div class=\"dropdown-menu\">
-			        <a class=\"dropdown-item\" href=\"edit.html\">
+function display_settings($id){
+		 echo  "<i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
+                <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i>
+                </a>
+                <div class=\"dropdown-menu\">
+			        <a class=\"dropdown-item\" href=\"edit_page.php?id=".$id." \">
 			            <i class=\"fa fa-edit\"></i>
 			        Редактировать</a>
 			        <a class=\"dropdown-item\" href=\"security.html\">
@@ -132,6 +133,16 @@ function set_info_card($id_new_user, $upload_img, $username, $title, $tel, $addr
 	]);
 
 	return $pdo->lastInsertId();
+}
+/* Функция для update дополнительных данных юзера */
+function upd_info_card($id_user, $username, $title, $tel, $address){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE list_card SET username=$username, title=$title, tel=$tel, address=$address WHERE id=$id_new_user";
+	$statement = $pdo->prepare($sql);
+	$result = $statement->execute();
+
+	return $pdo->lastInsertId();
+
 }
 /* Функция загрузки аватара на сервер */
 function upload_file($file){

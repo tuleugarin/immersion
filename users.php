@@ -7,6 +7,7 @@
         <main id="js-page-content" role="main" class="page-content mt-3">
             <?php //показываем сообщения от создания юзера
                 echo display_flash_message("success");
+                echo display_flash_message("danger");
             ?>
             <div class="subheader">
                 <h1 class="subheader-title">
@@ -35,9 +36,8 @@
             <div class="row" id="js-contacts">
 <?php // Вывести карточки из списока пользователей
     $card=info_card();
-    foreach ($card as $card_user):;
+    foreach ($card as $card_user):
 ?>
-
                 <div class="col-xl-4">
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
@@ -52,11 +52,11 @@
 
 <?php   if (!empty($admin)) //показываем кнопку настройки
         {
-            display_settings();
+            display_settings($card_user['id']);
         }
         elseif ($_SESSION["is_logged_in_id"]==$card_user['id'])
         {
-            display_settings();
+            display_settings($card_user['id']);
         }
 ?>
                                     </a>
@@ -71,7 +71,7 @@
                         <div class="card-body p-0 collapse show">
                             <div class="p-3">
                                 <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php echo ($card_user['tel']); ?></a>
+                                    <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php echo($card_user['tel']); ?></a>
                                 <a href="mailto:<?php echo ($_SESSION["login"]); ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
                                     <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo ($_SESSION["login"]); ?></a>
                                 <address class="fs-sm fw-400 mt-4 text-muted">
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+<?php endforeach; ?>
             </div>
         </main>
 <?php require "footer.php";?>
