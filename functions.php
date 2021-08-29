@@ -41,6 +41,7 @@ function display_flash_message($name){
 function logout(){
 	// Сброс сессии
 	unset($_SESSION['is_logged_in']);
+	unset($_SESSION['id']);
 }
 function is_admin($email){
 	$user = get_user_by_email($email);
@@ -129,7 +130,6 @@ function enter_address($id, $address){
 	$statement = $pdo->prepare($sql);
 	$statement->execute(['address'=>$address]);
 }
-
 /* Функция для создания дополнительных данных юзера */
 function enter_user_img($id, $name_ava){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
@@ -140,28 +140,12 @@ function enter_user_img($id, $name_ava){
 /* Функция для проверки свои ли аккаунт редактирую */
 function is_my_account_edit($id){
 	if (is_admin($_SESSION['is_logged_in'])) {   // Проверка на админ
-        $card=get_users();
-        foreach ($card as $card_user){
-            if ($card_user['id']==$id){
-                $username = $card_user['username'];
-                $title = $card_user['title'];
-                $tel = $card_user['tel'];
-                $address = $card_user['address'];
-            }
-        }
+        return true;
     }
     else{
         // Проверка свой id или нет
         if ($id==$_SESSION["id"]){
-            $card=get_users();
-            foreach ($card as $card_user){
-                if ($card_user['id']==$id){
-                    $username = $card_user['username'];
-                    $title = $card_user['title'];
-                    $tel = $card_user['tel'];
-                    $address = $card_user['address'];
-                }
-            }
+            return true;
         }
         else{
             // Если не админ и не свой id
@@ -169,6 +153,12 @@ function is_my_account_edit($id){
             redirect_to("users.php");
         }
     }
+}
+function enter_email($id, $email){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `email` = :email WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['email'=>$email]);
 }
 
 ?>

@@ -5,7 +5,7 @@ authorization_check();  // Проверка авторизации
 $id = $_GET['id'];
 is_my_account_edit($id);
 require "header.php";
-	$card=get_users();
+$card=get_users();
 foreach ($card as $card_user){
     if ($card_user['id']==$id){
         $username = $card_user['username'];
