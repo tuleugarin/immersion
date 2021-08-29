@@ -13,6 +13,9 @@ foreach ($card as $card_user){
 }
 ?>
 <main id="js-page-content" role="main" class="page-content mt-3">
+     <?php // Показываем уведомление ошибки
+            echo display_flash_message("danger");
+        ?>
     <div class="subheader">
         <h1 class="subheader-title">
             <i class='subheader-icon fal fa-lock'></i> Безопасность

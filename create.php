@@ -6,12 +6,12 @@ $username = $_POST["username"];
 $title = $_POST["title"];
 $tel = $_POST["tel"];
 $address = $_POST["address"];
-$login = $_POST["login"];
+$email = $_POST["email"];
 $password = $_POST["password"];
 $status_online = $_POST['status_online'];
 
 
-$user = get_user_by_email($login);
+$user = get_user_by_email($email);
 
 //если логин занят то перенаправляем назад
 if (!empty($user)) {
@@ -25,7 +25,7 @@ if (isset($_FILES['file'])) {
 }
 
 /* 	если пользователь новый тогда сохряняем в базе тут */
-$id = add_user($login, $password);
+$id = add_user($email, $password);
 
 //тут сохряняем в отдельной базе остальные данные
 enter_username($id, $username);
