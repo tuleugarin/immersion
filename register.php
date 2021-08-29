@@ -2,10 +2,10 @@
 session_start();
 require "functions.php";
 
-$login = $_POST["login"];
+$email = $_POST["email"];
 $password = $_POST["password"];
 
-$user = get_user_by_login($login);
+$user = get_user_by_email($email);
 
 //если логин занят то перенаправляем назад
 if (!empty($user)) {
@@ -14,7 +14,7 @@ if (!empty($user)) {
 }
 
 //если пользователь новый тогда сохряняем в базе
-add_user($login, $password);
+add_user($email, $password);
 
 set_flash_message("success", "Регистрация успешна");
 

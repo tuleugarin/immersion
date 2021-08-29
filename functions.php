@@ -1,12 +1,12 @@
 <?php
 
-function get_user_by_login($login){
+function get_user_by_email($email){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
 
-	$sql = "SELECT * FROM list_users WHERE login=:login";
+	$sql = "SELECT * FROM list_users WHERE email=:email";
 
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['login'=>$login]);
+	$statement->execute(['email'=>$email]);
 	$user = $statement-> fetch(PDO::FETCH_ASSOC);
 	return $user;
 }
@@ -18,14 +18,14 @@ function redirect_to($path){
 	header("Location: {$path}");
 	exit;
 }
-function add_user($login, $password){
+function add_user($email, $password){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
 
-	$sql = "INSERT INTO list_users (login, password) VALUES (:login, :password)";
+	$sql = "INSERT INTO list_users (email, password, img, username, title, tel, address, role) VALUES (:email, :password, '', '', '', '', '', '')";
 
 	$statement = $pdo->prepare($sql);
 	$result = $statement->execute([
-		'login'=>$login,
+		'email'=>$email,
 		'password'=>password_hash($password, PASSWORD_DEFAULT)
 	]);
 
@@ -38,111 +38,36 @@ function display_flash_message($name){
     }
 }
 /*Эта функция чистит сессии при нажатии на кнопку ВЫХОД*/
-function Logout(){
-
-	// Делаем cookies устаревшими (единственный способ их удалит)
-	setcookie('user_id', '', time() -1 );// -1 сек пожже
-
+function logout(){
 	// Сброс сессии
-	unset($_SESSION['is_logged_in_id']);
-	unset($_SESSION['login']);
+	unset($_SESSION['is_logged_in']);
 }
-/*создал таблицу list_status там 2 строки id и id_user-его
-я связал с id строкой таблицы зарегистрированных пользователей
-чтобы  выбрат среди них админов */
-function get_admin(){
-	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-
-	$sql = "SELECT * FROM list_status WHERE id_user";
-
-	$statement = $pdo->prepare($sql);
-	$statement->execute(['id_user'=>$users]);
-	$users = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-	foreach ($users as $key => $value)
-		if ($value['id_user']==$_SESSION["is_logged_in_id"])
-			return true;//тут я сравнил айди номер из сессии с айди номерами из таблицы с админами если 1 тогда он админ
+function is_admin($email){
+	$user = get_user_by_email($email);
+		if ($user['role'] == 'admin')
+			return true;
+		else
+			return false;
 }
 /* Авторизация */
 function authorization_check(){
-	// Если в контексте сессии не установлен, то мы будем брать их из куки
-	if ( !isset($_SESSION['is_logged_in_id']) && isset($_COOKIE['user_id'])){
-		$_SESSION["is_logged_in_id"] = $_COOKIE["user_id"];
-	}
+
 	// Если идентификатор пуст, то он неавторизованный
-	if (empty($_SESSION["is_logged_in_id"])){
+	if (empty($_SESSION["is_logged_in"])){
 		header("Location: /page_login.php");
 				exit;
 	}
 }
-/*Эта функция определяет если переменная не пустая
-тогда он АДМИН и ему надо показать кнопку иначе не показыват */
-function display_button_create($name){
-		if (!empty($name)) {
-			echo "<a class=\"btn btn-success\" href=\"create_user.php\">Добавить</a>";
-		}
-}
-/* функция опции настройки только для юзера*/
-function display_settings($id){
-		 echo  "<i class=\"fal fas fa-cog fa-fw d-inline-block ml-1 fs-md\"></i>
-                <i class=\"fal fa-angle-down d-inline-block ml-1 fs-md\"></i>
-                </a>
-                <div class=\"dropdown-menu\">
-			        <a class=\"dropdown-item\" href=\"edit_page.php?id=".$id." \">
-			            <i class=\"fa fa-edit\"></i>
-			        Редактировать</a>
-			        <a class=\"dropdown-item\" href=\"security.html\">
-			            <i class=\"fa fa-lock\"></i>
-			        Безопасность</a>
-			        <a class=\"dropdown-item\" href=\"status.html\">
-			            <i class=\"fa fa-sun\"></i>
-			        Установить статус</a>
-			        <a class=\"dropdown-item\" href=\"media.html\">
-			            <i class=\"fa fa-camera\"></i>
-			            Загрузить аватар
-			        </a>
-			        <a href=\"#\" class=\"dropdown-item\" onclick=\"return confirm('are you sure?')\">
-			            <i class=\"fa fa-window-close\"></i>
-			            Удалить
-			        </a>
-			    </div>";
-}
 /* Функция вывода данных из списка пользователей */
-function info_card(){
+function get_users(){
 		$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
 
-		$sql = "SELECT * FROM list_card";
+		$sql = "SELECT * FROM list_users";
 
 		$statment = $pdo -> prepare($sql);
         $statment -> execute();
         $card = $statment ->fetchAll(PDO::FETCH_ASSOC);
         return $card;
-}
-/* Функция для создания дополнительных данных юзера */
-function set_info_card($id_new_user, $upload_img, $username, $title, $tel, $address){
-	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "INSERT INTO list_card (id, img, username, title, tel, address) VALUES (:id, :img, :username, :title, :tel, :address)";
-	$statement = $pdo->prepare($sql);
-	$result = $statement->execute([
-		'id'=>$id_new_user,
-		'img'=>$upload_img,
-		'username'=>$username,
-		'title'=>$title,
-		'tel'=>$tel,
-		'address'=>$address,
-	]);
-
-	return $pdo->lastInsertId();
-}
-/* Функция для update дополнительных данных юзера */
-function upd_info_card($id_user, $username, $title, $tel, $address){
-	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE list_card SET username=$username, title=$title, tel=$tel, address=$address WHERE id=$id_new_user";
-	$statement = $pdo->prepare($sql);
-	$result = $statement->execute();
-
-	return $pdo->lastInsertId();
-
 }
 /* Функция загрузки аватара на сервер */
 function upload_file($file){
@@ -159,22 +84,91 @@ function upload_file($file){
 		return;
 	}
 	// Типы допустимых файлов
-	$types = ['image/png', 'image/gif', 'image/jpg', 'image/jpeg'];
+	$types = ['image/png', 'image/gif', 'image/jpg', 'image/jpeg', 'image/svg'];
 	if (!in_array($file['type'], $types)){
 		set_flash_message("danger", "Тип загружаемого файла не изображение");
 		redirect_to("create_user.php");
 		return;
 	}
 	// Копируем файл в директорию
-	$file_name = 'img/demo/avatars/'."avatar-".uniqid().".png";
-	if (move_uploaded_file($file["tmp_name"], $file_name)){
-		set_flash_message("success", "Файл загружен");
+	$uploaddir = 'img/demo/avatars/';
+	$path = $file['name'];
+	$ext = pathinfo($path,PATHINFO_EXTENSION); // тут получаем формат файла
+	$file_name = uniqid().".".$ext;
 
+	if (move_uploaded_file($file["tmp_name"], $uploaddir.$file_name)){
+		return $file_name;
 	}
 	else{
 		set_flash_message("danger", "Файл не загружен");
 		redirect_to("create_user.php");
 	}
+}
+/* Функции для создания дополнительных данных юзера */
+function enter_username($id, $username){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `username` = :username WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['username'=>$username]);
+}
+function enter_title($id, $title){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `title` = :title WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['title'=>$title]);
+}
+function enter_tel($id, $tel){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `tel` = :tel WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['tel'=>$tel]);
+}
+function enter_address($id, $address){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `address` = :address WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['address'=>$address]);
+}
+
+/* Функция для создания дополнительных данных юзера */
+function enter_user_img($id, $name_ava){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `img` = :img WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['img'=>$name_ava]);
+}
+/* Функция для проверки свои ли аккаунт редактирую */
+function is_my_account_edit($id){
+	if (is_admin($_SESSION['is_logged_in'])) {   // Проверка на админ
+        $card=get_users();
+        foreach ($card as $card_user){
+            if ($card_user['id']==$id){
+                $username = $card_user['username'];
+                $title = $card_user['title'];
+                $tel = $card_user['tel'];
+                $address = $card_user['address'];
+            }
+        }
+    }
+    else{
+        // Проверка свой id или нет
+        if ($id==$_SESSION["id"]){
+            $card=get_users();
+            foreach ($card as $card_user){
+                if ($card_user['id']==$id){
+                    $username = $card_user['username'];
+                    $title = $card_user['title'];
+                    $tel = $card_user['tel'];
+                    $address = $card_user['address'];
+                }
+            }
+        }
+        else{
+            // Если не админ и не свой id
+            set_flash_message("danger", "Ошибка : можно редактировать только свой профиль");
+            redirect_to("users.php");
+        }
+    }
 }
 
 ?>

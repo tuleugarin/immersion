@@ -17,8 +17,8 @@
             <div class="row">
                 <div class="col-xl-12">
 <?php // Показываем кнопку Создать
-    $admin = get_admin();
-    display_button_create($admin);
+    if(is_admin($_SESSION['is_logged_in']))
+        echo "<a class=\"btn btn-success\" href=\"create_user.php\">Добавить</a>";
 ?>
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
@@ -35,7 +35,7 @@
             </div>
             <div class="row" id="js-contacts">
 <?php // Вывести карточки из списока пользователей
-    $card=info_card();
+    $card=get_users();
     foreach ($card as $card_user):
 ?>
                 <div class="col-xl-4">
@@ -50,15 +50,53 @@
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         <?php echo ($card_user['username']); ?>
 
-<?php   if (!empty($admin)) //показываем кнопку настройки
-        {
-            display_settings($card_user['id']);
-        }
-        elseif ($_SESSION["is_logged_in_id"]==$card_user['id'])
-        {
-            display_settings($card_user['id']);
-        }
-?>
+                    <?php   if (is_admin($_SESSION['is_logged_in'])): ?> <!--показываем кнопку настройки-->
+                           <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                                        <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="edit.php?id=<?php echo ($card_user['id']); ?>">
+                                            <i class="fa fa-edit"></i>
+                                        Редактировать</a>
+                                        <a class="dropdown-item" href="security.html">
+                                            <i class="fa fa-lock"></i>
+                                        Безопасность</a>
+                                        <a class="dropdown-item" href="status.html">
+                                            <i class="fa fa-sun"></i>
+                                        Установить статус</a>
+                                        <a class="dropdown-item" href="media.html">
+                                            <i class="fa fa-camera"></i>
+                                            Загрузить аватар
+                                        </a>
+                                        <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                            <i class="fa fa-window-close"></i>
+                                            Удалить
+                                        </a>
+                                    </div>
+                            <?php elseif ($_SESSION["is_logged_in"]==$card_user['email']): ?>
+                            <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                                        <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="edit.php?id=<?php echo ($card_user['id']); ?>">
+                                            <i class="fa fa-edit"></i>
+                                        Редактировать</a>
+                                        <a class="dropdown-item" href="security.html">
+                                            <i class="fa fa-lock"></i>
+                                        Безопасность</a>
+                                        <a class="dropdown-item" href="status.html">
+                                            <i class="fa fa-sun"></i>
+                                        Установить статус</a>
+                                        <a class="dropdown-item" href="media.html">
+                                            <i class="fa fa-camera"></i>
+                                            Загрузить аватар
+                                        </a>
+                                        <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                            <i class="fa fa-window-close"></i>
+                                            Удалить
+                                        </a>
+                                    </div>
+                    <?php endif; ?>
                                     </a>
                                     <span class="text-truncate text-truncate-xl"><?php echo ($card_user['title']); ?></span>
                                 </div>
@@ -72,8 +110,8 @@
                             <div class="p-3">
                                 <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
                                     <i class="fas fa-mobile-alt text-muted mr-2"></i> <?php echo($card_user['tel']); ?></a>
-                                <a href="mailto:<?php echo ($_SESSION["login"]); ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo ($_SESSION["login"]); ?></a>
+                                <a href="mailto:<?php echo ($card_user['email']); ?>" class="mt-1 d-block fs-sm fw-400 text-dark">
+                                    <i class="fas fa-mouse-pointer text-muted mr-2"></i> <?php echo ($card_user['email']); ?></a>
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i> <?php echo ($card_user['address']); ?></address>
                                 <div class="d-flex flex-row">

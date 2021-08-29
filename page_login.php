@@ -2,7 +2,7 @@
     session_start();
     require "functions.php";
     /*Попадая на страницу page_login.php аторизация сбрасывается*/
-    Logout();
+    logout();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +47,7 @@
             <form action="auth.php" method="post">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>
-                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name="login">
+                    <input type="email" id="username" class="form-control" placeholder="Эл. адрес" value="" name="email">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
@@ -63,7 +63,7 @@
             </form>
         </div>
         <div class="blankpage-footer text-center">
-            Нет аккаунта? <a href="page_register.html"><strong>Зарегистрироваться</strong>
+            Нет аккаунта? <a href="page_register.php"><strong>Зарегистрироваться</strong>
         </div>
     </div>
     <video poster="img/backgrounds/clouds.png" id="bgvid" playsinline autoplay muted loop>

@@ -1,10 +1,8 @@
 <?php
     session_start();
     require "functions.php";
-    authorization_check();
-    // Если переменный пуст то он не админ
-    $admin = get_admin();
-    if (empty($admin)){
+
+    if (!is_admin($_SESSION['is_logged_in'])){
         header("Location: /users.php");
     }
     // Загрузка шляпы сайта

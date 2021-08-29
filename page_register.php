@@ -65,7 +65,7 @@ require "functions.php";?>
                                     <form id="js-login" novalidate="" action="register.php" method="post">
                                         <div class="form-group">
                                             <label class="form-label" for="emailverify">Email</label>
-                                            <input type="email" id="emailverify" class="form-control" placeholder="Эл. адрес" required name="login">
+                                            <input type="email" id="emailverify" class="form-control" placeholder="Эл. адрес" required name="email">
                                             <div class="invalid-feedback">Заполните поле.</div>
                                             <div class="help-block">Эл. адрес будет вашим логином при авторизации</div>
                                         </div>

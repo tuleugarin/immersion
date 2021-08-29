@@ -11,9 +11,7 @@ $password = $_POST["password"];
 $status_online = $_POST['status_online'];
 
 
-
-$user = get_user_by_login($login);
-
+$user = get_user_by_email($login);
 
 //если логин занят то перенаправляем назад
 if (!empty($user)) {
@@ -23,22 +21,19 @@ if (!empty($user)) {
 
 /* Загрузка аватарки */
 if (isset($_FILES['file'])) {
-
-
-	upload_file($_FILES['file']);
-}
-else{
-	set_flash_message("danger", "файл не загружен2");
-	redirect_to("create_user.php");
+	$name_ava = upload_file($_FILES['file']);
 }
 
-/* 	если пользователь новый тогда сохряняем в базе тут
-*	создаем логин и пароль и получаем id номер
-*/
-$id_new_user = add_user($login, $password);
+/* 	если пользователь новый тогда сохряняем в базе тут */
+$id = add_user($login, $password);
 
 //тут сохряняем в отдельной базе остальные данные
-set_info_card($id_new_user, $name_ava, $username, $title, $tel, $address);
+enter_username($id, $username);
+enter_title($id, $title);
+enter_tel($id, $tel);
+enter_address($id, $address);
+//тут добавляем название картинки аватра в таблицу
+enter_user_img($id, $name_ava);
 
 set_flash_message("success", "Профиль успешно обновлен.");
 
