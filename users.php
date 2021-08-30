@@ -43,7 +43,18 @@
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
 
                             <div class="d-flex flex-row align-items-center">
-                                <span class="status status-success mr-3">
+                                <span class="status <?php switch ($card_user["status"]){
+                                                            case "Онлайн" :
+                                                                echo "status-success";
+                                                                break;
+                                                            case "Отошел" :
+                                                                echo "status-warning";
+                                                                break;
+                                                            case "Не беспокоить" :
+                                                                echo "status-dunger";
+                                                                break;
+                                                            default :
+                                                                echo "status-success";} ?> mr-3">
                                     <span class="rounded-circle profile-image d-block " style="background-image:url('img/demo/avatars/<?php echo ($card_user["img"]); ?>'); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
@@ -51,7 +62,7 @@
                                         <?php echo ($card_user['username']); ?>
 
                     <?php   if (is_admin($_SESSION['is_logged_in'])): ?> <!--показываем кнопку настройки-->
-                           <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                    <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>
                                     <div class="dropdown-menu">
@@ -61,10 +72,10 @@
                                         <a class="dropdown-item" href="security.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
@@ -84,10 +95,10 @@
                                         <a class="dropdown-item" href="security.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php?id=<?php echo ($card_user['id']); ?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>

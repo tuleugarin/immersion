@@ -21,7 +21,7 @@ foreach ($card as $card_user){
                 <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
             </h1>
         </div>
-        <form action="edit_page.php?id=<?php echo $_GET['id'];?>" method="POST">
+        <form action="edit_page.php?id=<?php echo $id;?>" method="POST">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">

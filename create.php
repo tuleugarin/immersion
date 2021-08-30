@@ -8,7 +8,7 @@ $tel = $_POST["tel"];
 $address = $_POST["address"];
 $email = $_POST["email"];
 $password = $_POST["password"];
-$status_online = $_POST['status_online'];
+$status = $_POST['status'];
 
 
 $user = get_user_by_email($email);
@@ -32,6 +32,8 @@ enter_username($id, $username);
 enter_title($id, $title);
 enter_tel($id, $tel);
 enter_address($id, $address);
+enter_status($id, $status);
+
 //тут добавляем название картинки аватра в таблицу
 enter_user_img($id, $name_ava);
 

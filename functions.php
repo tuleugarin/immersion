@@ -21,7 +21,7 @@ function redirect_to($path){
 function add_user($email, $password){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;","root", "");
 
-	$sql = "INSERT INTO list_users (email, password, img, username, title, tel, address, role) VALUES (:email, :password, '', '', '', '', '', '')";
+	$sql = "INSERT INTO list_users (email, password, img, username, title, tel, address, role, status) VALUES (:email, :password, '', '', '', '', '', '', '')";
 
 	$statement = $pdo->prepare($sql);
 	$result = $statement->execute([
@@ -160,5 +160,10 @@ function enter_email($id, $email){
 	$statement = $pdo->prepare($sql);
 	$statement->execute(['email'=>$email]);
 }
-
+function enter_status($id, $status){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "UPDATE `list_users` SET `status` = :status WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute(['status'=>$status]);
+}
 ?>
