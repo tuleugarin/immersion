@@ -166,4 +166,10 @@ function enter_status($id, $status){
 	$statement = $pdo->prepare($sql);
 	$statement->execute(['status'=>$status]);
 }
+function has_img($img){
+	if (!empty($img))
+		echo $img;
+	else
+		echo 'avatar-m.png';
+}
 ?>
