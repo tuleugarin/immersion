@@ -172,4 +172,10 @@ function has_img($img){
 	else
 		echo 'avatar-m.png';
 }
+function delete_user($id){
+	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
+	$sql = "DELETE FROM `list_users` WHERE `list_users`.`id` = $id";
+	$statement = $pdo->prepare($sql);
+	$statement->execute();
+}
 ?>
