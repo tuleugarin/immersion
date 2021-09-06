@@ -108,34 +108,34 @@ function upload_file($file){
 /* Функции для создания дополнительных данных юзера */
 function enter_username($id, $username){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `username` = :username WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `username` = :username WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['username'=>$username]);
+	$statement->execute(['username'=>$username, 'id'=>$id]);
 }
 function enter_title($id, $title){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `title` = :title WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `title` = :title WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['title'=>$title]);
+	$statement->execute(['title'=>$title, 'id'=>$id]);
 }
 function enter_tel($id, $tel){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `tel` = :tel WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `tel` = :tel WHERE `list_users`.`id` =:id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['tel'=>$tel]);
+	$statement->execute(['tel'=>$tel, 'id'=>$id]);
 }
 function enter_address($id, $address){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `address` = :address WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `address` = :address WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['address'=>$address]);
+	$statement->execute(['address'=>$address, 'id'=>$id]);
 }
 /* Функция для создания дополнительных данных юзера */
 function enter_user_img($id, $name_ava){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `img` = :img WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `img` = :img WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['img'=>$name_ava]);
+	$statement->execute(['img'=>$name_ava, 'id'=>$id]);
 }
 /* Функция для проверки свои ли аккаунт редактирую */
 function is_my_account_edit($id){
@@ -156,15 +156,15 @@ function is_my_account_edit($id){
 }
 function enter_email($id, $email){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `email` = :email WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `email` = :email WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['email'=>$email]);
+	$statement->execute(['email'=>$email, 'id'=>$id]);
 }
 function enter_status($id, $status){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "UPDATE `list_users` SET `status` = :status WHERE `list_users`.`id` = $id";
+	$sql = "UPDATE `list_users` SET `status` = :status WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['status'=>$status]);
+	$statement->execute(['status'=>$status,'id'=>$id]);
 }
 function has_img($img){
 	if (!empty($img))
@@ -174,8 +174,8 @@ function has_img($img){
 }
 function delete_user($id){
 	$pdo = new PDO("mysql:host=localhost;dbname=first_project;", "root", "");
-	$sql = "DELETE FROM `list_users` WHERE `list_users`.`id` = $id";
+	$sql = "DELETE FROM `list_users` WHERE `list_users`.`id` = :id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute();
+	$statement->execute(['id'=>$id]);
 }
 ?>
